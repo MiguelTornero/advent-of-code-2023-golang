@@ -46,10 +46,10 @@ func getLastNumber(s string, m map[string]int) (int, int) {
 			continue
 		}
 
-		number, matchSize := getTextMatch(s[i:], m)
+		matchedNumber, matchSize := getTextMatch(s[i:], m)
 
 		if matchSize >= 0 {
-			number, matchIndex = number, i+matchSize
+			number, matchIndex = matchedNumber, i+matchSize
 		}
 	}
 
@@ -61,16 +61,15 @@ func sumLines(lines []string, m map[string]int) (int, error) {
 
 	for _, line := range lines {
 		first, i := getFirstNumber(line, m)
-		var second int
 		if i < 0 {
 			return 0, errors.New("no number found in string")
 		}
-
-		if i <= len(line) {
+		second, ii := getLastNumber(line[i:], m)
+		if ii < 0 {
 			second = first
-		} else {
-			second, ii := getLastNumber(line[i:], m)
 		}
+
+		output += first*10 + second
 	}
 
 	return output, nil
@@ -92,13 +91,13 @@ func main() {
 	lines, err := adventofcode2023golang.FromFile("input.txt")
 
 	if err != nil {
-		log.Fatal("%v", err)
+		log.Fatalf("%v", err)
 	}
 
 	result, err := sumLines(lines, numbers)
 
 	if err != nil {
-		log.Fatal("%v", err)
+		log.Fatalf("%v", err)
 	}
 
 	fmt.Printf("RESULT: %d\n", result)
