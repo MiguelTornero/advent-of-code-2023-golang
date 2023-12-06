@@ -21,7 +21,8 @@ func getTextMatch(s string, m map[string]int) (int, int) {
 }
 
 func getFirstNumber(s string, m map[string]int) (int, int) {
-	for i := 0; i < len(s); i++ {
+	length := len(s)
+	for i := 0; i < length; i++ {
 		r, _ := utf8.DecodeRuneInString(s[i:])
 		if adventofcode2023golang.IsDigit(r) {
 			num := int(r - '0')
