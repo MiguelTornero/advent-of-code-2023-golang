@@ -128,38 +128,43 @@ func parseGameLines(lines []string) ([]*gameRound, error) {
 	return output, nil
 }
 
-func (g *gameRound) isPossible(maxRed int, maxGreen int, maxBlue int) bool {
-	for _, set := range g.sets {
-		if set.red > maxRed {
-			return false
-		}
-		if set.green > maxGreen {
-			return false
-		}
-		if set.blue > maxBlue {
-			return false
-		}
-
-	}
-	return true
+func (s *cubeSet) GetPower() int {
+	return s.red * s.green * s.blue
 }
 
-func getPossibleGamesSum(games []*gameRound, maxRed int, maxGreen int, maxBlue int) int {
-	output := 0
+func (g *gameRound) GetMinimunCubeSet() *cubeSet {
+	output := &cubeSet{
+		red:   0,
+		green: 0,
+		blue:  0,
+	}
 
-	for _, game := range games {
-		if game.isPossible(maxRed, maxGreen, maxBlue) {
-			output += game.id
+	for _, set := range g.sets {
+		if set.red > output.red {
+			output.red = set.red
+		}
+		if set.green > output.green {
+			output.green = set.green
+		}
+		if set.blue > output.blue {
+			output.blue = set.blue
 		}
 	}
 
 	return output
 }
 
+func sumMinimumSetPowers(games []*gameRound) int {
+	output := 0
+	for _, game := range games {
+		minSet := game.GetMinimunCubeSet()
+		output += minSet.GetPower()
+	}
+
+	return output
+}
+
 func main() {
-	const MAX_RED = 12
-	const MAX_GREEN = 13
-	const MAX_BLUE = 14
 
 	lines, err := adventofcode2023golang.FromFile("input.txt")
 	if err != nil {
@@ -171,8 +176,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Sum of possible game IDs with %d reds, %d greens, and %d blues:\n", MAX_RED, MAX_GREEN, MAX_BLUE)
-
-	impossibleGames := getPossibleGamesSum(games, MAX_RED, MAX_GREEN, MAX_BLUE)
-	fmt.Println(impossibleGames)
+	result := sumMinimumSetPowers(games)
+	fmt.Println("RESULT:", result)
 }
