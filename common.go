@@ -1,4 +1,4 @@
-package adventofcode2023golang
+package common
 
 import (
 	"bufio"
@@ -28,4 +28,8 @@ func FromFile(name string) ([]string, error) {
 	}
 
 	return output, nil
+}
+
+func Hello() string {
+	return "world"
 }

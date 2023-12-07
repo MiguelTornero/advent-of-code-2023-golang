@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	adventofcode2023golang "github.com/MiguelTornero/advent-of-code-2023-golang"
+	common "github.com/MiguelTornero/advent-of-code-2023-golang"
 )
 
 func getTextMatch(s string, m map[string]int) (int, int) {
@@ -24,7 +24,7 @@ func getFirstNumber(s string, m map[string]int) (int, int) {
 	length := len(s)
 	for i := 0; i < length; i++ {
 		r, _ := utf8.DecodeRuneInString(s[i:])
-		if adventofcode2023golang.IsDigit(r) {
+		if common.IsDigit(r) {
 			num := int(r - '0')
 			return num, i + 1
 		}
@@ -42,7 +42,7 @@ func getFirstNumber(s string, m map[string]int) (int, int) {
 func getLastNumber(s string, m map[string]int) (int, int) {
 	number, matchIndex := 0, -1
 	for i, r := range s {
-		if adventofcode2023golang.IsDigit(r) {
+		if common.IsDigit(r) {
 			number, matchIndex = int(r-'0'), i
 			continue
 		}
@@ -89,7 +89,7 @@ func main() {
 		"nine":  9,
 	}
 
-	lines, err := adventofcode2023golang.FromFile("input.txt")
+	lines, err := common.FromFile("input.txt")
 
 	if err != nil {
 		log.Fatalf("%v", err)

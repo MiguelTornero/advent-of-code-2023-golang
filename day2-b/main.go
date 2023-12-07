@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	adventofcode2023golang "github.com/MiguelTornero/advent-of-code-2023-golang"
+	common "github.com/MiguelTornero/advent-of-code-2023-golang"
 )
 
 type cubeSet struct {
@@ -166,7 +166,7 @@ func sumMinimumSetPowers(games []*gameRound) int {
 
 func main() {
 
-	lines, err := adventofcode2023golang.FromFile("input.txt")
+	lines, err := common.FromFile("input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"log"
 
-	adventofcode2023golang "github.com/MiguelTornero/advent-of-code-2023-golang"
+	common "github.com/MiguelTornero/advent-of-code-2023-golang"
 )
 
 func getLastDigit(s string) (rune, int) {
 	runes := []rune(s)
 	for i := len(runes) - 1; i >= 0; i-- {
-		if adventofcode2023golang.IsDigit(runes[i]) {
+		if common.IsDigit(runes[i]) {
 			return runes[i], i
 		}
 	}
@@ -20,7 +20,7 @@ func getLastDigit(s string) (rune, int) {
 
 func getFirstDigit(s string) (rune, int) {
 	for i, r := range s {
-		if adventofcode2023golang.IsDigit(r) {
+		if common.IsDigit(r) {
 			return r, i
 		}
 	}
@@ -47,7 +47,7 @@ func sumLines(lines []string) (int, error) {
 }
 
 func main() {
-	lines, err := adventofcode2023golang.FromFile("input.txt")
+	lines, err := common.FromFile("input.txt")
 	if err != nil {
 		log.Fatalf("%v\n", err)
 	}
