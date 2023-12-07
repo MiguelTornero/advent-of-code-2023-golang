@@ -76,6 +76,17 @@ func parseSetLineString(s string) ([]*cubeSet, error) {
 	return output, nil
 }
 
+func (g *gameRound) Print() {
+	delimiter := "------------------------------------"
+	fmt.Println(delimiter)
+	fmt.Println("id:", g.id)
+
+	for i, set := range g.sets {
+		fmt.Printf("%d: red=%d green=%d blue=%d\n", i, set.red, set.green, set.blue)
+	}
+	fmt.Println(delimiter)
+}
+
 func parseGameString(s string) (*gameRound, error) {
 	s = strings.TrimSpace(s)
 	r, _ := regexp.Compile(`^Game\s+(\d+):\s+(.*)$`)
@@ -118,23 +129,18 @@ func parseGameLines(lines []string) ([]*gameRound, error) {
 }
 
 func (g *gameRound) isPossible(maxRed int, maxGreen int, maxBlue int) bool {
-	red, green, blue := 0, 0, 0
 	for _, set := range g.sets {
-		red += set.red
-		green += set.green
-		blue += set.blue
-	}
+		if set.red > maxRed {
+			return false
+		}
+		if set.green > maxGreen {
+			return false
+		}
+		if set.blue > maxBlue {
+			return false
+		}
 
-	if red > maxRed {
-		return false
 	}
-	if green > maxGreen {
-		return false
-	}
-	if blue > maxBlue {
-		return false
-	}
-
 	return true
 }
 
