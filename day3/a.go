@@ -127,13 +127,15 @@ func getValidNumbersSum(lines []string) int {
 	mat := GetRuneMatrix(lines)
 	PrintMatrix(mat)
 
-	inNumber := false
-	isValid := false
-	currentNumber := 0
+	var inNumber bool
+	var isValid bool
+	var currentNumber int
 
 	rows := len(mat)
 	for i := 0; i < rows; i++ {
+
 		cols := len(mat[i])
+
 		for j := 0; j < cols; j++ {
 			c := mat[i][j]
 			if common.IsDigit(c) {
@@ -155,6 +157,19 @@ func getValidNumbersSum(lines []string) int {
 				inNumber = false
 				isValid = false
 			}
+		}
+
+		if inNumber {
+			if isValid {
+				output += currentNumber
+
+				fmt.Println("valid number:", currentNumber)
+			} else {
+				fmt.Println("not valid number:", currentNumber)
+			}
+			currentNumber = 0
+			inNumber = false
+			isValid = false
 		}
 	}
 
