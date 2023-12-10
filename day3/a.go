@@ -64,47 +64,8 @@ func GetRuneMatrix(lines []string) [][]rune {
 }
 
 func IsTouchingSymbol(paddedRunes [][]rune, row int, column int, height int, width int) bool {
-	var ul, uc, ur, cr, cl, ll, lc, lr rune = '.', '.', '.', '.', '.', '.', '.', '.'
+	var ul, uc, ur, cr, cl, ll, lc, lr rune = GetAllAdjecentValues[rune](paddedRunes, row, column, height, width, '.')
 
-	if row > 0 {
-		if column > 0 {
-			// upper left
-			ul = paddedRunes[row-1][column-1]
-		}
-
-		// upper center
-		uc = paddedRunes[row-1][column]
-
-		if column < width-1 {
-			// upper right
-			ur = paddedRunes[row-1][column+1]
-		}
-	}
-
-	if column > 0 {
-		// left
-		cl = paddedRunes[row][column-1]
-	}
-
-	if column < width-1 {
-		// right
-		cr = paddedRunes[row][column+1]
-	}
-
-	if row < height-1 {
-		if column > 0 {
-			// lower left
-			ll = paddedRunes[row+1][column-1]
-		}
-
-		// lower center
-		lc = paddedRunes[row+1][column]
-
-		if column < width-1 {
-			// lower right
-			lr = paddedRunes[row+1][column+1]
-		}
-	}
 	return IsSymbol(ul) || IsSymbol(uc) || IsSymbol(ur) || IsSymbol(cr) || IsSymbol(cl) || IsSymbol(ll) || IsSymbol(lc) || IsSymbol(lr)
 }
 

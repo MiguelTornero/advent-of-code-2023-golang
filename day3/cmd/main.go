@@ -12,6 +12,9 @@ func main() {
 		case "a":
 			day3.PartA("input.txt")
 			os.Exit(0)
+		case "b":
+			day3.PartB("input.txt")
+			os.Exit(0)
 		}
 	}
 	os.Exit(1)
