@@ -15,7 +15,7 @@ func getLineScore(line string) (int, error) {
 	count := 0
 
 	err := errors.New("invalid card string")
-	parts := regexp.MustCompile(`Card \d+:`).Split(line, 2)
+	parts := regexp.MustCompile(`^Card\s+\d+:`).Split(line, 2)
 
 	if len(parts) != 2 {
 		return 0, err
@@ -69,7 +69,7 @@ func getLineScore(line string) (int, error) {
 	return score, nil
 }
 
-func getWinningNumbersSum(lines []string) (int, error) {
+func GetWinningNumbersSum(lines []string) (int, error) {
 	output := 0
 
 	for _, line := range lines {
@@ -91,7 +91,7 @@ func PartA(filename string) {
 		log.Fatal(err)
 	}
 
-	result, err := getWinningNumbersSum(lines)
+	result, err := GetWinningNumbersSum(lines)
 	if err != nil {
 		log.Fatal(err)
 	}
