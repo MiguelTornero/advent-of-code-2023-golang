@@ -13,7 +13,7 @@ func main() {
 			day4.PartA("input.txt")
 			os.Exit(0)
 		case "b":
-			//day4.PartB("input.txt")
+			day4.PartB("input.txt")
 			os.Exit(0)
 		}
 	}

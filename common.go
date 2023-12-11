@@ -30,6 +30,16 @@ func FromFile(name string) ([]string, error) {
 	return output, nil
 }
 
+func Sum(nums []int) int {
+	result := 0
+
+	for _, num := range nums {
+		result += num
+	}
+
+	return result
+}
+
 func Hello() string {
 	return "world"
 }

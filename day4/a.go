@@ -11,7 +11,7 @@ import (
 	common "github.com/MiguelTornero/advent-of-code-2023-golang"
 )
 
-func getLineScore(line string) (int, error) {
+func GetLineWinCount(line string) (int, error) {
 	count := 0
 
 	err := errors.New("invalid card string")
@@ -54,6 +54,16 @@ func getLineScore(line string) (int, error) {
 			fmt.Println("Found an obtained winning number:", num)
 			count++
 		}
+	}
+
+	return count, nil
+}
+
+func getLineScore(line string) (int, error) {
+	count, err := GetLineWinCount(line)
+
+	if err != nil {
+		return 0, err
 	}
 
 	if count <= 0 {
