@@ -5,6 +5,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	common "github.com/MiguelTornero/advent-of-code-2023-golang"
 )
 
 type Mapper struct {
@@ -256,6 +258,47 @@ func ParseAlmanac(lines []string, maxElems int, m *Mapper) ([]int, *Graph[*Range
 	return seeds, graph, nil
 }
 
-func GraphPathBST(g *Graph[*RangeCollection]) []int {
+func GraphPathBFS(g *Graph[*RangeCollection], from int, to int) []int {
+	q := common.NewQueue[int]()
+	q.Push(from)
+
+	size := g.GetSize()
+
+	froms := make([]int, size)
+	for i := range froms {
+		froms[i] = -1
+	}
+	froms[from] = 0
+
+	for !q.IsEmpty() {
+		visit := q.Pop()
+
+		if visit == to {
+			//we've made it
+			output := []int{}
+
+			i := to
+			for i != from {
+				output = append(output, i)
+				i = froms[i]
+			}
+
+			return common.Reverse[int](append(output, from))
+		}
+
+		for adj := 0; adj < size; adj++ {
+			v, _ := g.GetEdge(visit, adj)
+
+			if v == nil {
+				continue
+			}
+
+			if froms[adj] < 0 {
+				froms[adj] = visit
+				q.Push(adj)
+			}
+		}
+	}
+
 	return nil
 }

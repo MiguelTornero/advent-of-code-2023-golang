@@ -195,3 +195,33 @@ func TestAlmanacParser(t *testing.T) {
 	assert.NotNil(t, rc)
 	assert.Nil(t, err)
 }
+
+func TestBFS(t *testing.T) {
+	lines := strings.Split(almanacStr, "\n")
+	mapper := day5.NewMapper()
+
+	_, g, err := day5.ParseAlmanac(lines, 10, mapper)
+	assert.Nil(t, err)
+
+	seedNum := mapper.GetItem("seed")
+	locationNum := mapper.GetItem("location")
+
+	a := day5.GraphPathBFS(g, seedNum, locationNum)
+	assert.Equal(t, []int{0, 1, 2, 3, 4, 5, 6, 7}, a)
+
+	g2 := day5.NewGraph[*day5.RangeCollection](5)
+
+	g2.SetEdge(0, 1, day5.NewRangeCollection())
+	g2.SetEdge(0, 3, day5.NewRangeCollection())
+	g2.SetEdge(0, 4, day5.NewRangeCollection())
+	g2.SetEdge(1, 0, day5.NewRangeCollection())
+	g2.SetEdge(1, 3, day5.NewRangeCollection())
+	g2.SetEdge(3, 0, day5.NewRangeCollection())
+	g2.SetEdge(3, 1, day5.NewRangeCollection())
+	g2.SetEdge(3, 2, day5.NewRangeCollection())
+
+	b := day5.GraphPathBFS(g2, 0, 2)
+	assert.Equal(t, []int{0, 3, 2}, b)
+
+	assert.Nil(t, day5.GraphPathBFS(g2, 2, 4))
+}

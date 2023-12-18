@@ -67,3 +67,14 @@ func (q *Queue[T]) Push(elem T) {
 func (q *Queue[T]) IsEmpty() bool {
 	return len(q.elements) <= 0
 }
+
+func Reverse[T any](s []T) []T {
+	lenght := len(s)
+	output := make([]T, lenght)
+
+	for i := range s {
+		output[lenght-i-1] = s[i]
+	}
+
+	return output
+}
