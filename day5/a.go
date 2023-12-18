@@ -2,6 +2,8 @@ package day5
 
 import (
 	"errors"
+	"fmt"
+	"log"
 	"regexp"
 	"strconv"
 	"strings"
@@ -330,4 +332,35 @@ func GetLocations(seeds []int, graph *Graph[*RangeCollection], mapper *Mapper) (
 	}
 
 	return output, nil
+}
+
+func GetLowestLocationFromAlmanac(lines []string) (int, error) {
+	mapper := NewMapper()
+
+	seeds, g, err := ParseAlmanac(lines, 10, mapper)
+	if err != nil {
+		return 0, err
+	}
+
+	locs, err := GetLocations(seeds, g, mapper)
+
+	if err != nil {
+		return 0, err
+	}
+
+	return common.Min(locs), nil
+}
+
+func PartA(file string) {
+	lines, err := common.FromFile(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	result, err := GetLowestLocationFromAlmanac(lines)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("RESULT", result)
 }

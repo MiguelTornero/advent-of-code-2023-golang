@@ -226,7 +226,7 @@ func TestBFS(t *testing.T) {
 	assert.Nil(t, day5.GraphPathBFS(g2, 2, 4))
 }
 
-func TestGetLocations(t *testing.T) {
+func TestLocations(t *testing.T) {
 	lines := strings.Split(almanacStr, "\n")
 	mapper := day5.NewMapper()
 
@@ -240,4 +240,14 @@ func TestGetLocations(t *testing.T) {
 	assert.Equal(t, []int{79, 14, 55, 13}, seeds)
 
 	assert.Equal(t, []int{82, 43, 86, 35}, locs)
+}
+
+func TestLowestLocation(t *testing.T) {
+	lines := strings.Split(almanacStr, "\n")
+
+	result, err := day5.GetLowestLocationFromAlmanac(lines)
+
+	assert.Nil(t, err)
+
+	assert.Equal(t, 35, result)
 }
