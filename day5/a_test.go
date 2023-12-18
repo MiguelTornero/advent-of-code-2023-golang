@@ -178,6 +178,20 @@ func TestAlmanacParser(t *testing.T) {
 	lines := strings.Split(almanacStr, "\n")
 	mapper := day5.NewMapper()
 
-	err := day5.ParseAlmanac(lines, 10, mapper)
+	_, _, err := day5.ParseAlmanac([]string{"a", "b"}, 10, day5.NewMapper())
+	assert.NotNil(t, err)
+
+	seeds, g, err := day5.ParseAlmanac(lines, 10, mapper)
 	assert.Nil(t, err)
+
+	assert.Equal(t, []int{79, 14, 55, 13}, seeds)
+
+	assert.NotNil(t, g)
+
+	seedNum := mapper.GetItem("seed")
+	soilNum := mapper.GetItem("soil")
+
+	rc, err := g.GetEdge(seedNum, soilNum)
+	assert.NotNil(t, rc)
+
 }

@@ -199,9 +199,13 @@ func ParseMapNums(lines []string, m *Mapper) (*RangeCollection, error) {
 	return output, nil
 }
 
-func ParseAlmanac(lines []string, maxElems int, m *Mapper) error {
+func ParseAlmanac(lines []string, maxElems int, m *Mapper) ([]int, *Graph[*RangeCollection], error) {
 	seedsRegex := regexp.MustCompile(`^seeds:(.*)$`)
+	wsRegex := regexp.MustCompile(`\s+`)
 	mapRegex := regexp.MustCompile(`^([A-Za-z]+)-to-([A-Za-z]+)\s+map:$`)
+
+	seeds := []int{}
+	graph := NewGraph[*RangeCollection](maxElems)
 
 	for i := 0; i < len(lines); i++ {
 		line := strings.TrimSpace(lines[i])
@@ -211,7 +215,17 @@ func ParseAlmanac(lines []string, maxElems int, m *Mapper) error {
 
 		seedsMatch := seedsRegex.FindStringSubmatch(line)
 		if len(seedsMatch) > 0 {
-			// parse seed here
+			numsStr := strings.TrimSpace(seedsMatch[1])
+			numsStrs := wsRegex.Split(numsStr, -1)
+
+			for _, numStr := range numsStrs {
+				n, err := strconv.Atoi(numStr)
+				if err != nil {
+					return nil, nil, err
+				}
+				seeds = append(seeds, n)
+			}
+
 			continue
 		}
 
@@ -219,17 +233,25 @@ func ParseAlmanac(lines []string, maxElems int, m *Mapper) error {
 		if len(mapMatch) > 0 {
 			rc, err := ParseMapNums(lines[i+1:], m)
 			if err != nil {
-				return err
+				return nil, nil, err
 			}
 			size := rc.GetSize()
 			i = i + size
 
+			fromStr := mapMatch[1]
+			toStr := mapMatch[2]
+
+			fromNum := m.GetItem(fromStr)
+			toNum := m.GetItem(toStr)
+
+			graph.SetEdge(fromNum, toNum, rc)
+
 			continue
 		}
 
-		return errors.New("invalid almanac string at line " + strconv.Itoa(i+1))
+		return nil, nil, errors.New("invalid almanac string at line " + strconv.Itoa(i+1))
 
 	}
 
-	return nil
+	return seeds, graph, nil
 }
