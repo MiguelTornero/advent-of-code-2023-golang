@@ -193,5 +193,5 @@ func TestAlmanacParser(t *testing.T) {
 
 	rc, err := g.GetEdge(seedNum, soilNum)
 	assert.NotNil(t, rc)
-
+	assert.Nil(t, err)
 }

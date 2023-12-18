@@ -43,3 +43,27 @@ func Sum(nums []int) int {
 func Hello() string {
 	return "world"
 }
+
+type Queue[T any] struct {
+	elements []T
+}
+
+func NewQueue[T any]() *Queue[T] {
+	return &Queue[T]{
+		elements: []T{},
+	}
+}
+
+func (q *Queue[T]) Pop() T {
+	top, new := q.elements[0], q.elements[1:]
+	q.elements = new
+	return top
+}
+
+func (q *Queue[T]) Push(elem T) {
+	q.elements = append(q.elements, elem)
+}
+
+func (q *Queue[T]) IsEmpty() bool {
+	return len(q.elements) <= 0
+}

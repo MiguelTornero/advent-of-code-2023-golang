@@ -255,3 +255,7 @@ func ParseAlmanac(lines []string, maxElems int, m *Mapper) ([]int, *Graph[*Range
 
 	return seeds, graph, nil
 }
+
+func GraphPathBST(g *Graph[*RangeCollection]) []int {
+	return nil
+}
