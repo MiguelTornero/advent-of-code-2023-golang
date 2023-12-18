@@ -192,7 +192,7 @@ func ParseMapNums(lines []string, m *Mapper) (*RangeCollection, error) {
 
 		start := nums[1]
 		end := nums[1] + nums[2] - 1
-		offset := nums[0]
+		offset := nums[0] - nums[1]
 
 		output.AddRage(start, end, offset)
 
@@ -283,7 +283,7 @@ func GraphPathBFS(g *Graph[*RangeCollection], from int, to int) []int {
 				i = froms[i]
 			}
 
-			return common.Reverse[int](append(output, from))
+			return common.Reverse[int](output)
 		}
 
 		for adj := 0; adj < size; adj++ {
@@ -301,4 +301,33 @@ func GraphPathBFS(g *Graph[*RangeCollection], from int, to int) []int {
 	}
 
 	return nil
+}
+
+func GetLocations(seeds []int, graph *Graph[*RangeCollection], mapper *Mapper) ([]int, error) {
+	output := make([]int, len(seeds))
+
+	seedIndex := mapper.GetItem("seed")
+	locationIndex := mapper.GetItem("location")
+	path := GraphPathBFS(graph, seedIndex, locationIndex)
+
+	if path == nil {
+		return nil, errors.New("path from seed to location not found")
+	}
+
+	for i, seed := range seeds {
+		lastIndex := seedIndex
+		acum := seed
+		for _, curr := range path {
+			rc, err := graph.GetEdge(lastIndex, curr)
+			if err != nil {
+				return nil, err
+			}
+
+			acum = rc.Transform(acum)
+			lastIndex = curr
+		}
+		output[i] = acum
+	}
+
+	return output, nil
 }

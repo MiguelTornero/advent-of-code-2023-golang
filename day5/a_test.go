@@ -151,7 +151,7 @@ humidity-to-location map:
 56 93 4`
 
 func TestParseMapNums(t *testing.T) {
-	input := []string{"1 2 3", "4 5 6", ""}
+	input := []string{"1 2 3", "6 5 4", ""}
 	mapper := day5.NewMapper()
 
 	a, b := day5.ParseMapNums(input, mapper)
@@ -165,13 +165,13 @@ func TestParseMapNums(t *testing.T) {
 	r = a.GetFirstMatchingRange(5)
 	assert.NotNil(t, r)
 
-	assert.Equal(t, a.Transform(2), 3)
-	assert.Equal(t, a.Transform(4), 5)
+	assert.Equal(t, 1, a.Transform(2))
+	assert.Equal(t, 3, a.Transform(4))
 
 	assert.Equal(t, a.Transform(0), 0)
 
-	assert.Equal(t, a.Transform(5), 9)
-	assert.Equal(t, a.Transform(10), 14)
+	assert.Equal(t, 6, a.Transform(5))
+	assert.Equal(t, 9, a.Transform(8))
 }
 
 func TestAlmanacParser(t *testing.T) {
@@ -207,7 +207,7 @@ func TestBFS(t *testing.T) {
 	locationNum := mapper.GetItem("location")
 
 	a := day5.GraphPathBFS(g, seedNum, locationNum)
-	assert.Equal(t, []int{0, 1, 2, 3, 4, 5, 6, 7}, a)
+	assert.Equal(t, []int{1, 2, 3, 4, 5, 6, 7}, a)
 
 	g2 := day5.NewGraph[*day5.RangeCollection](5)
 
@@ -221,7 +221,23 @@ func TestBFS(t *testing.T) {
 	g2.SetEdge(3, 2, day5.NewRangeCollection())
 
 	b := day5.GraphPathBFS(g2, 0, 2)
-	assert.Equal(t, []int{0, 3, 2}, b)
+	assert.Equal(t, []int{3, 2}, b)
 
 	assert.Nil(t, day5.GraphPathBFS(g2, 2, 4))
+}
+
+func TestGetLocations(t *testing.T) {
+	lines := strings.Split(almanacStr, "\n")
+	mapper := day5.NewMapper()
+
+	seeds, g, err := day5.ParseAlmanac(lines, 10, mapper)
+	assert.Nil(t, err)
+
+	locs, err := day5.GetLocations(seeds, g, mapper)
+
+	assert.Nil(t, err)
+
+	assert.Equal(t, []int{79, 14, 55, 13}, seeds)
+
+	assert.Equal(t, []int{82, 43, 86, 35}, locs)
 }

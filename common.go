@@ -69,12 +69,33 @@ func (q *Queue[T]) IsEmpty() bool {
 }
 
 func Reverse[T any](s []T) []T {
-	lenght := len(s)
-	output := make([]T, lenght)
+	upper := len(s) - 1
+	lower := 0
+	var temp T
 
-	for i := range s {
-		output[lenght-i-1] = s[i]
+	for lower < upper {
+		temp = s[lower]
+		s[lower] = s[upper]
+		s[upper] = temp
+		lower++
+		upper--
 	}
 
-	return output
+	return s
+}
+
+func Min(nums []int) int {
+	var min int
+	if len(nums) < 1 {
+		return min
+	}
+
+	min = nums[0]
+	for _, num := range nums[1:] {
+		if num < min {
+			min = num
+		}
+	}
+
+	return min
 }
