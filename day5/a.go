@@ -248,7 +248,10 @@ func ParseAlmanac(lines []string, maxElems int, m *Mapper) ([]int, *Graph[*Range
 			fromNum := m.GetItem(fromStr)
 			toNum := m.GetItem(toStr)
 
-			graph.SetEdge(fromNum, toNum, rc)
+			_, err = graph.SetEdge(fromNum, toNum, rc)
+			if err != nil {
+				return nil, nil, err
+			}
 
 			continue
 		}
@@ -305,44 +308,55 @@ func GraphPathBFS(g *Graph[*RangeCollection], from int, to int) []int {
 	return nil
 }
 
-func GetLocations(seeds []int, graph *Graph[*RangeCollection], mapper *Mapper) ([]int, error) {
-	output := make([]int, len(seeds))
+func GetLocation(seed int, graph *Graph[*RangeCollection], start int, path []int) (int, error) {
+	lastIndex := start
+	acum := seed
+	for _, curr := range path {
+		rc, err := graph.GetEdge(lastIndex, curr)
+		if err != nil {
+			return 0, err
+		}
 
+		acum = rc.Transform(acum)
+		lastIndex = curr
+	}
+
+	return acum, nil
+}
+
+func GetPathFromSeedToLocation(graph *Graph[*RangeCollection], mapper *Mapper) (int, []int) {
 	seedIndex := mapper.GetItem("seed")
 	locationIndex := mapper.GetItem("location")
 	path := GraphPathBFS(graph, seedIndex, locationIndex)
+
+	return seedIndex, path
+
+}
+
+func GetLocations(seeds []int, graph *Graph[*RangeCollection], seedIndex int, path []int) ([]int, error) {
+	output := make([]int, len(seeds))
 
 	if path == nil {
 		return nil, errors.New("path from seed to location not found")
 	}
 
 	for i, seed := range seeds {
-		lastIndex := seedIndex
-		acum := seed
-		for _, curr := range path {
-			rc, err := graph.GetEdge(lastIndex, curr)
-			if err != nil {
-				return nil, err
-			}
-
-			acum = rc.Transform(acum)
-			lastIndex = curr
+		loc, err := GetLocation(seed, graph, seedIndex, path)
+		if err != nil {
+			return nil, err
 		}
-		output[i] = acum
+		output[i] = loc
 	}
 
 	return output, nil
 }
 
 func GetLowestLocationFromAlmanac(lines []string) (int, error) {
-	mapper := NewMapper()
-
-	seeds, g, err := ParseAlmanac(lines, 10, mapper)
+	seeds, g, _, start, path, err := FromAlmanac(lines)
 	if err != nil {
 		return 0, err
 	}
-
-	locs, err := GetLocations(seeds, g, mapper)
+	locs, err := GetLocations(seeds, g, start, path)
 
 	if err != nil {
 		return 0, err

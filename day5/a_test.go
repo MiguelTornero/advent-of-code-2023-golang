@@ -233,7 +233,10 @@ func TestLocations(t *testing.T) {
 	seeds, g, err := day5.ParseAlmanac(lines, 10, mapper)
 	assert.Nil(t, err)
 
-	locs, err := day5.GetLocations(seeds, g, mapper)
+	start, path := day5.GetPathFromSeedToLocation(g, mapper)
+	assert.NotNil(t, path)
+
+	locs, err := day5.GetLocations(seeds, g, start, path)
 
 	assert.Nil(t, err)
 
