@@ -99,3 +99,19 @@ func Min(nums []int) int {
 
 	return min
 }
+
+func Max(nums []int) int {
+	var max int
+	if len(nums) < 1 {
+		return max
+	}
+
+	max = nums[0]
+	for _, num := range nums[1:] {
+		if num > max {
+			max = num
+		}
+	}
+
+	return max
+}

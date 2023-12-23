@@ -11,6 +11,8 @@ func main() {
 		switch os.Args[1] {
 		case "a":
 			day5.PartA("input.txt")
+		case "b":
+			day5.PartB("input.txt")
 		}
 		os.Exit(0)
 	}
